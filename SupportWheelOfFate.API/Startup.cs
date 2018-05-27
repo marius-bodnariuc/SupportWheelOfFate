@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SupportWheelOfFate.API.Repositories;
 
 namespace SupportWheelOfFate.API
 {
@@ -25,6 +26,8 @@ namespace SupportWheelOfFate.API
         {
             services.AddMvc();
             services.AddCors();
+
+            services.AddTransient<IScheduleRepository, DummyScheduleRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
