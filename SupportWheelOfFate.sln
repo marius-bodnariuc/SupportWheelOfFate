@@ -5,7 +5,9 @@ VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportWheelOfFate.Web", "SupportWheelOfFate.Web\SupportWheelOfFate.Web.csproj", "{39A5B65D-A03A-496D-989A-B4086EF9F6FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportWheelOfFate.Web.MVC", "SupportWheelOfFate.Web.MVC\SupportWheelOfFate.Web.MVC.csproj", "{2EC77901-8820-4C7A-BD2B-6BA3A45FC45B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportWheelOfFate.API", "SupportWheelOfFate.API\SupportWheelOfFate.API.csproj", "{5438C899-3CCE-414B-9C62-BBE4C865B66E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportWheelOfFate.API.Test", "SupportWheelOfFate.API.Test\SupportWheelOfFate.API.Test.csproj", "{B691A99D-9FE2-44AE-B2C9-5F6B5E589808}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +19,14 @@ Global
 		{39A5B65D-A03A-496D-989A-B4086EF9F6FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39A5B65D-A03A-496D-989A-B4086EF9F6FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39A5B65D-A03A-496D-989A-B4086EF9F6FB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2EC77901-8820-4C7A-BD2B-6BA3A45FC45B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2EC77901-8820-4C7A-BD2B-6BA3A45FC45B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2EC77901-8820-4C7A-BD2B-6BA3A45FC45B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2EC77901-8820-4C7A-BD2B-6BA3A45FC45B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5438C899-3CCE-414B-9C62-BBE4C865B66E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5438C899-3CCE-414B-9C62-BBE4C865B66E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5438C899-3CCE-414B-9C62-BBE4C865B66E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5438C899-3CCE-414B-9C62-BBE4C865B66E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B691A99D-9FE2-44AE-B2C9-5F6B5E589808}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B691A99D-9FE2-44AE-B2C9-5F6B5E589808}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B691A99D-9FE2-44AE-B2C9-5F6B5E589808}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B691A99D-9FE2-44AE-B2C9-5F6B5E589808}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
