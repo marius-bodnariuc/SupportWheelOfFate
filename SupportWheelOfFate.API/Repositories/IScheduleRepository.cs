@@ -7,6 +7,8 @@ namespace SupportWheelOfFate.API.Repositories
 {
     public interface IScheduleRepository
     {
+        void Add(Schedule schedule);
+
         IEnumerable<Schedule> GetSchedulesBetween(DateTime startTime, DateTime endTime);
     }
 }

@@ -7,6 +7,11 @@ namespace SupportWheelOfFate.API.Repositories
 {
     public class DummyScheduleRepository : IScheduleRepository
     {
+        public void Add(Schedule schedule)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<Schedule> GetSchedulesBetween(DateTime startTime, DateTime endTime)
         {
             return new List<Schedule>
