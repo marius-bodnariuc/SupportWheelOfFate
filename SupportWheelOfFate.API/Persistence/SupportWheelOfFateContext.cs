@@ -8,6 +8,11 @@ namespace SupportWheelOfFate.API.Persistence
 {
     public class SupportWheelOfFateContext : DbContext
     {
+        public SupportWheelOfFateContext()
+        {
+
+        }
+
         public SupportWheelOfFateContext(DbContextOptions<SupportWheelOfFateContext> options)
             : base(options)
         {

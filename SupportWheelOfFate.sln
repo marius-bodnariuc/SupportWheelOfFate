@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportWheelOfFate.Web", "SupportWheelOfFate.Web\SupportWheelOfFate.Web.csproj", "{39A5B65D-A03A-496D-989A-B4086EF9F6FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportWheelOfFate.API", "SupportWheelOfFate.API\SupportWheelOfFate.API.csproj", "{5438C899-3CCE-414B-9C62-BBE4C865B66E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SupportWheelOfFate.API", "SupportWheelOfFate.API\SupportWheelOfFate.API.csproj", "{5438C899-3CCE-414B-9C62-BBE4C865B66E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportWheelOfFate.API.Test", "SupportWheelOfFate.API.Test\SupportWheelOfFate.API.Test.csproj", "{B691A99D-9FE2-44AE-B2C9-5F6B5E589808}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SupportWheelOfFate.API.Test", "SupportWheelOfFate.API.Test\SupportWheelOfFate.API.Test.csproj", "{B691A99D-9FE2-44AE-B2C9-5F6B5E589808}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

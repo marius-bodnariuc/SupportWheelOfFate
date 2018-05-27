@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using SupportWheelOfFate.API.Persistence;
 
 namespace SupportWheelOfFate.API.Repositories
@@ -18,7 +19,14 @@ namespace SupportWheelOfFate.API.Repositories
         // TODO make async
         public IEnumerable<Schedule> GetSchedulesBetween(DateTime startTime, DateTime endTime)
         {
-            throw new NotImplementedException();
+            var schedules = _dbContext.Schedules
+                .Where(schedule => schedule.StartTime >= startTime && schedule.EndTime <= endTime)
+                .ToList();
+
+            // TODO use ILogger, instead
+            Console.WriteLine($"GetSchedulesBetween {startTime.Date} and {endTime.Date}: {schedules.Count()} found");
+
+            return schedules;
         }
 
         // TODO make async
@@ -26,6 +34,9 @@ namespace SupportWheelOfFate.API.Repositories
         {
             _dbContext.Schedules.Add(schedule);
             _dbContext.SaveChanges();
+
+            // TODO use ILogger, instead
+            Console.WriteLine($"New schedule added to DB. New total: {_dbContext.Schedules.Count()}");
         }
     }
 }

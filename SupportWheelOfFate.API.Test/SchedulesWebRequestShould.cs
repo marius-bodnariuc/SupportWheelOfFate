@@ -18,7 +18,7 @@ namespace SupportWheelOfFate.API.Test
         public SchedulesWebRequestShould()
         {
             _server = new TestServer(
-                new WebHostBuilder().UseStartup<Startup>());
+                new WebHostBuilder().UseStartup<StartupForIntegrationTests>());
 
             _client = _server.CreateClient();
         }

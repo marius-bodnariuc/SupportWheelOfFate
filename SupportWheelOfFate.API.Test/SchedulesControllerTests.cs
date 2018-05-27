@@ -29,8 +29,8 @@ namespace SupportWheelOfFate.API.Test
                 scheduleDTOs.Select(scheduleDTO => (scheduleDTO.Employee, scheduleDTO.StartTime)));
 
             mockRepo.Verify(repo => repo.GetSchedulesBetween(
-                It.Is<DateTime>(dateTime => dateTime.Date == DateTime.Now.AddDays(-14).Date),
-                It.Is<DateTime>(dateTime => dateTime.Date == DateTime.Now.AddDays(14).Date)));
+                It.Is<DateTime>(dateTime => dateTime.Date == DateTime.Now.AddDays(-Constants.DefaultIntervalInDays).Date),
+                It.Is<DateTime>(dateTime => dateTime.Date == DateTime.Now.AddDays(Constants.DefaultIntervalInDays).Date)));
         }
 
         #region Private helpers
