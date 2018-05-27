@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.TestHost;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
@@ -30,6 +31,8 @@ namespace SupportWheelOfFate.API.Test
 
             var stringContent = await response.Content.ReadAsStringAsync();
             var schedules = JsonConvert.DeserializeObject<IEnumerable<ScheduleDTO>>(stringContent);
+
+            Assert.Equal(4, schedules.Count());
         }
     }
 }
