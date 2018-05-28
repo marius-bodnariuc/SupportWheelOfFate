@@ -17,18 +17,18 @@ namespace SupportWheelOfFate.Core.Test
             var numberOfOptions = 2;
             var numberOfPositions = 5;
 
-            var patternGenerator = new Mock<IPatternGenerator>();
-            patternGenerator.Setup(generator => generator.GenerateLazy(numberOfOptions, numberOfPositions))
+            var mockPatternGenerator = new Mock<IPatternGenerator>();
+            mockPatternGenerator.Setup(generator => generator.GenerateLazy(numberOfOptions, numberOfPositions))
                 .Returns(PatternsToBeGenerated);
 
-            var workPatternValidator = new Mock<IWorkPatternValidator>();
-            workPatternValidator.Setup(validator => validator.Validate(It.IsAny<WorkPatternRepresentation>()))
+            var mockWorkPatternValidator = new Mock<IWorkPatternValidator>();
+            mockWorkPatternValidator.Setup(validator => validator.Validate(It.IsAny<WorkPatternRepresentation>()))
                 .Returns(NoConsecutiveWorkdaysPredicate);
 
             var workPatternGenerator = new WorkPatternGenerator(
                 numberOfOptions, numberOfPositions,
-                patternGenerator.Object,
-                workPatternValidator.Object);
+                mockPatternGenerator.Object,
+                mockWorkPatternValidator.Object);
 
             // Act
             var validWorkPatterns = workPatternGenerator.GenerateValidPatterns();
@@ -38,6 +38,9 @@ namespace SupportWheelOfFate.Core.Test
             Assert.Collection(validWorkPatterns,
                 firstPattern => Assert.Equal(PatternsToBeGenerated.First(), firstPattern),
                 secondPattern => Assert.Equal(PatternsToBeGenerated.Skip(2).First(), secondPattern));
+
+            mockPatternGenerator.VerifyAll();
+            mockWorkPatternValidator.VerifyAll();
         }
 
         #region Private helpers
