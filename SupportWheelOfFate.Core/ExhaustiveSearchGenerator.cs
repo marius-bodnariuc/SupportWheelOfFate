@@ -5,16 +5,9 @@ using System.Text;
 
 namespace SupportWheelOfFate.Core
 {
-    public class ExhaustiveSearchGenerator
+    public class ExhaustiveSearchGenerator : IPatternGenerator
     {
-        private int _numberOfOptions;
-
-        public ExhaustiveSearchGenerator(int numberOfOptions)
-        {
-            _numberOfOptions = numberOfOptions;
-        }
-
-        public IEnumerable<IEnumerable<int>> GenerateLazy(int numberOfPositions)
+        public IEnumerable<IEnumerable<int>> GenerateLazy(int numberOfOptions, int numberOfPositions)
         {
             if (numberOfPositions <= 0)
             {
@@ -22,9 +15,9 @@ namespace SupportWheelOfFate.Core
             }
             else
             {
-                for (var option = 0; option < _numberOfOptions; option++)
+                for (var option = 0; option < numberOfOptions; option++)
                 {
-                    foreach (var combo in GenerateLazy(numberOfPositions - 1))
+                    foreach (var combo in GenerateLazy(numberOfOptions, numberOfPositions - 1))
                     {
                         yield return new[] { option }.Concat(combo);
                     }

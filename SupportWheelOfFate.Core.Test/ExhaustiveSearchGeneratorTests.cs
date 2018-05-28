@@ -69,8 +69,8 @@ namespace SupportWheelOfFate.Core.Test
 
         private IEnumerable<IEnumerable<int>> GenerateAllCombinations(int numberOfOptions, int numberOfPositions)
         {
-            var generator = new ExhaustiveSearchGenerator(numberOfOptions);
-            return generator.GenerateLazy(numberOfPositions);
+            var generator = new ExhaustiveSearchGenerator();
+            return generator.GenerateLazy(numberOfOptions, numberOfPositions);
         }
     }
 }
