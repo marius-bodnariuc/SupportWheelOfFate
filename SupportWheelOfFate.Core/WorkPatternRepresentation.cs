@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace SupportWheelOfFate.Core
 {
@@ -9,6 +10,11 @@ namespace SupportWheelOfFate.Core
         public WorkPatternRepresentation(IEnumerable<int> collection)
             : base(collection)
         {
+        }
+
+        public override string ToString()
+        {
+            return string.Join(",", this.Select(num => num.ToString()));
         }
     }
 }

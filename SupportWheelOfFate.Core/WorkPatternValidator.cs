@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SupportWheelOfFate.Core
 {
-    public class WorkPatternValidator
+    public class WorkPatternValidator : IWorkPatternValidator
     {
         private readonly List<BusinessRule> _businessRules;
 
