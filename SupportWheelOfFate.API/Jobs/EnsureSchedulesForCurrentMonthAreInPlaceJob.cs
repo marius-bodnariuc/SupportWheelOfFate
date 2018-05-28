@@ -29,9 +29,15 @@ namespace SupportWheelOfFate.API.Jobs
             var employeePairs = Enumerable.Empty<(string, string)>();
             (DaysInMonth / Workdays.Count() + 1).Times(() =>
             {
-                // TODO: make sure the first pair in a new set doesn't include
-                // any of the employees from the last pair in previous set
-                employeePairs = employeePairs.Concat(Employees.ToRandomPairs());
+                // making sure the first pair in a new set doesn't include
+                // any of the employees from the last pair in the previous set
+                var randomPairs = Employees.ToRandomPairs();
+                while (InvalidCombo(randomPairs.First(), employeePairs.LastOrDefault()))
+                {
+                    randomPairs = Employees.ToRandomPairs();
+                }
+
+                employeePairs = employeePairs.Concat(randomPairs);
             });
 
             var schedules = WorkdaysInMonth.Zip(employeePairs,
@@ -96,6 +102,34 @@ namespace SupportWheelOfFate.API.Jobs
                 firstDayInMonth, firstDayInMonth.AddDays(1));
 
             return schedulesForFirstDayInMonth.Any();
+        }
+
+        private bool InvalidCombo((string, string) current, (string, string) previous)
+        {
+            var firstPairInCurrentSet = new List<string>
+                {
+                    current.Item1,
+                    current.Item2,
+                };
+
+            var lastPairInPreviousSet = new List<string>
+                {
+                    previous.Item1,
+                    previous.Item2
+                };
+
+            foreach (var person in firstPairInCurrentSet)
+            {
+                foreach (var otherPerson in lastPairInPreviousSet)
+                {
+                    if (person.Equals(otherPerson))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }
