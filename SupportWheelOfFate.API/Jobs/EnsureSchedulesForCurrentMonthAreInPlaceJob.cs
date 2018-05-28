@@ -26,37 +26,10 @@ namespace SupportWheelOfFate.API.Jobs
                 return;
             }
 
-            var employeePairs = Enumerable.Empty<(string, string)>();
-            (DaysInMonth / Workdays.Count() + 1).Times(() =>
-            {
-                // making sure the first pair in a new set doesn't include
-                // any of the employees from the last pair in the previous set
-                var randomPairs = Employees.ToRandomPairs();
-                while (InvalidCombo(randomPairs.First(), employeePairs.LastOrDefault()))
-                {
-                    randomPairs = Employees.ToRandomPairs();
-                }
+            var schedules = WorkdaysInMonth.Zip(EmployeePairs, BuildSchedulesForEmployeePair)
+                .SelectMany(schedule => schedule);
 
-                employeePairs = employeePairs.Concat(randomPairs);
-            });
-
-            var schedules = WorkdaysInMonth.Zip(employeePairs,
-                (workday, employeePair) => new List<Schedule>
-                {
-                    new Schedule
-                    {
-                        Employee = employeePair.Item1,
-                        StartTime = new DateTime(workday.Year, workday.Month, workday.Day, 9, 0, 0),
-                        EndTime = new DateTime(workday.Year, workday.Month, workday.Day, 13, 0, 0)
-                    },
-                    new Schedule
-                    {
-                        Employee = employeePair.Item2,
-                        StartTime = new DateTime(workday.Year, workday.Month, workday.Day, 13, 0, 0),
-                        EndTime = new DateTime(workday.Year, workday.Month, workday.Day, 17, 0, 0)
-                    }
-                }).SelectMany(schedule => schedule);
-
+            // TODO add a bulk insert method, perhaps
             schedules.ToList().ForEach(schedule => _scheduleRepository.Add(schedule));
 
             Console.WriteLine("Generated schedules for current month");
@@ -102,6 +75,45 @@ namespace SupportWheelOfFate.API.Jobs
                 firstDayInMonth, firstDayInMonth.AddDays(1));
 
             return schedulesForFirstDayInMonth.Any();
+        }
+
+        private static Func<DateTime, (string, string), List<Schedule>> BuildSchedulesForEmployeePair =>
+            (workday, employeePair) => new List<Schedule>
+                {
+                    new Schedule
+                    {
+                        Employee = employeePair.Item1,
+                        StartTime = new DateTime(workday.Year, workday.Month, workday.Day, 9, 0, 0),
+                        EndTime = new DateTime(workday.Year, workday.Month, workday.Day, 13, 0, 0)
+                    },
+                    new Schedule
+                    {
+                        Employee = employeePair.Item2,
+                        StartTime = new DateTime(workday.Year, workday.Month, workday.Day, 13, 0, 0),
+                        EndTime = new DateTime(workday.Year, workday.Month, workday.Day, 17, 0, 0)
+                    }
+                };
+
+        private IEnumerable<(string, string)> EmployeePairs
+        {
+            get
+            {
+                var employeePairs = Enumerable.Empty<(string, string)>();
+                (DaysInMonth / Workdays.Count() + 1).Times(() =>
+                {
+                    // making sure the first pair in a new set doesn't include
+                    // any of the employees from the last pair in the previous set
+                    var randomPairs = Employees.ToRandomPairs();
+                    while (InvalidCombo(randomPairs.First(), employeePairs.LastOrDefault()))
+                    {
+                        randomPairs = Employees.ToRandomPairs();
+                    }
+
+                    employeePairs = employeePairs.Concat(randomPairs);
+                });
+
+                return employeePairs;
+            }
         }
 
         private bool InvalidCombo((string, string) current, (string, string) previous)
