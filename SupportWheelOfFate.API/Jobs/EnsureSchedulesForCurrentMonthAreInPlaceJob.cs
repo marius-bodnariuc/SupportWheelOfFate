@@ -103,17 +103,24 @@ namespace SupportWheelOfFate.API.Jobs
                 {
                     // making sure the first pair in a new set doesn't include
                     // any of the employees from the last pair in the previous set
-                    var randomPairs = Employees.ToRandomPairs();
-                    while (InvalidCombo(randomPairs.First(), employeePairs.LastOrDefault()))
-                    {
-                        randomPairs = Employees.ToRandomPairs();
-                    }
+                    var randomPairs = GetValidNextRandomPairList(employeePairs);
 
                     employeePairs = employeePairs.Concat(randomPairs);
                 });
 
                 return employeePairs;
             }
+        }
+
+        private IEnumerable<(string, string)> GetValidNextRandomPairList(IEnumerable<(string, string)> employeePairs)
+        {
+            var randomPairs = Employees.ToRandomPairs();
+            while (InvalidCombo(randomPairs.First(), employeePairs.LastOrDefault()))
+            {
+                randomPairs = Employees.ToRandomPairs();
+            }
+
+            return randomPairs;
         }
 
         private bool InvalidCombo((string, string) current, (string, string) previous)
