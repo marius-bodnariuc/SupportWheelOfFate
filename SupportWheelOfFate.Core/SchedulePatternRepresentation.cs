@@ -4,11 +4,12 @@ using System.Text;
 
 namespace SupportWheelOfFate.Core
 {
-    public class WorkPatternRepresentation : List<int>
+    public class SchedulePatternRepresentation : List<string>
     {
-        public WorkPatternRepresentation(IEnumerable<int> collection)
+        public SchedulePatternRepresentation(IEnumerable<string> collection)
             : base(collection)
         {
+
         }
     }
 }
