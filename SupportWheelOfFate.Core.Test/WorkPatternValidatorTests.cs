@@ -21,15 +21,6 @@ namespace SupportWheelOfFate.Core.Test
             mockAtLeastTwoShiftsInTwoWeeksBusinessRule.Setup(businessRule => businessRule.CheckAgainst(It.IsAny<WorkPatternRepresentation>()))
                 .Returns(AtLeastTwoShiftsInTwoWeeksPredicate);
 
-            var validWorkPattern = new WorkPatternRepresentation(
-                new[] { 1, 0, 1, 0, 1, 0, 1, 0, 1, 0 });
-
-            var invalidWorkPatternWithConsecutiveWorkdays = new WorkPatternRepresentation(
-                new[] { 1, 0, 0, 1, 1 });
-
-            var invalidWorkPatternWithNoTwoShiftsInTwoWeeks = new WorkPatternRepresentation(
-                new[] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
-
             var businessRules = new List<BusinessRule>
             {
                 mockNoConsecutiveWorkdaysBusinessRule.Object,
@@ -39,13 +30,16 @@ namespace SupportWheelOfFate.Core.Test
             var validator = new WorkPatternValidator(businessRules);
 
             // Act and Assert
-            Assert.True(validator.Validate(validWorkPattern));
-            Assert.False(validator.Validate(invalidWorkPatternWithConsecutiveWorkdays));
-            Assert.False(validator.Validate(invalidWorkPatternWithNoTwoShiftsInTwoWeeks));
+            Assert.True(validator.Validate(ValidWorkPattern));
+            Assert.False(validator.Validate(InvalidWorkPatternWithConsecutiveWorkdays));
+            Assert.False(validator.Validate(InvalidWorkPatternWithNoTwoShiftsInTwoWeeks));
+            Assert.False(validator.Validate(AnotherInvalidWorkPatternWithNoTwoShiftsInTwoWeeks));
 
             mockNoConsecutiveWorkdaysBusinessRule.VerifyAll();
             mockAtLeastTwoShiftsInTwoWeeksBusinessRule.VerifyAll();
         }
+
+        #region Private helpers
 
         private static Func<WorkPatternRepresentation, bool> NoConsecutiveWorkdaysPredicate
         {
@@ -70,5 +64,31 @@ namespace SupportWheelOfFate.Core.Test
                 return true;
             };
         }
+
+        private static WorkPatternRepresentation AnotherInvalidWorkPatternWithNoTwoShiftsInTwoWeeks
+        {
+            get => new WorkPatternRepresentation(
+                new[] { 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 });
+        }
+
+        private static WorkPatternRepresentation InvalidWorkPatternWithNoTwoShiftsInTwoWeeks
+        {
+            get => new WorkPatternRepresentation(
+                new[] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
+        }
+
+        private static WorkPatternRepresentation InvalidWorkPatternWithConsecutiveWorkdays
+        {
+            get => new WorkPatternRepresentation(
+                new[] { 1, 0, 0, 1, 1 });
+        }
+
+        private static WorkPatternRepresentation ValidWorkPattern
+        {
+            get => new WorkPatternRepresentation(
+                new[] { 1, 0, 1, 0, 1, 0, 1, 0, 1, 0 });
+        }
+
+        #endregion Private helpers
     }
 }
