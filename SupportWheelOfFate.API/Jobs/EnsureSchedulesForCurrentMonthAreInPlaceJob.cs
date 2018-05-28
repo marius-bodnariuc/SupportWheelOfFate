@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SupportWheelOfFate.API.Jobs
 {
-    internal class EnsureSchedulesForCurrentMonthAreInPlaceJob
+    internal class EnsureSchedulesForCurrentMonthAreInPlaceJob : IJob
     {
         private readonly IScheduleRepository _scheduleRepository;
 
@@ -19,34 +19,22 @@ namespace SupportWheelOfFate.API.Jobs
 
         public async Task Execute()
         {
-            // TODO move region to its own method
-            var firstDayInMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            var schedulesForFirstDayInMonth = _scheduleRepository.GetSchedulesBetween(
-                firstDayInMonth, firstDayInMonth.AddDays(1));
-
             // simplistic check, but it'll do if no one messes with the DB directly
-            if (schedulesForFirstDayInMonth.Any())
+            if (SchedulesForCurrentMonthAlreadyExist())
             {
                 Console.WriteLine("Schedules for current month already in place");
                 return;
             }
 
-            // TODO move region to its own method
-            var now = DateTime.Now;
-            var daysInMonth = DateTime.DaysInMonth(now.Year, now.Month);
-            var workdaysInMonth = Enumerable.Range(1, daysInMonth)
-                .Select(day => new DateTime(now.Year, now.Month, day))
-                .Where(date => Workdays.Contains(date.DayOfWeek));
-
             var employeePairs = Enumerable.Empty<(string, string)>();
-            (daysInMonth / Workdays.Count() + 1).Times(() =>
+            (DaysInMonth / Workdays.Count() + 1).Times(() =>
             {
                 // TODO: make sure the first pair in a new set doesn't include
                 // any of the employees from the last pair in previous set
                 employeePairs = employeePairs.Concat(Employees.ToRandomPairs());
             });
 
-            var schedules = workdaysInMonth.Zip(employeePairs,
+            var schedules = WorkdaysInMonth.Zip(employeePairs,
                 (workday, employeePair) => new List<Schedule>
                 {
                     new Schedule
@@ -69,9 +57,15 @@ namespace SupportWheelOfFate.API.Jobs
             await Task.CompletedTask;
         }
 
-        private IEnumerable<string> Employees
-        {
-            get => new List<string>
+        private IEnumerable<DateTime> WorkdaysInMonth =>
+            Enumerable.Range(1, DaysInMonth)
+                .Select(day => new DateTime(DateTime.Today.Year, DateTime.Today.Month, day))
+                .Where(date => Workdays.Contains(date.DayOfWeek));
+
+        private int DaysInMonth => DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month);
+
+        private IEnumerable<string> Employees  =>
+            new List<string>
             {
                 "John",
                 "Jane",
@@ -84,11 +78,9 @@ namespace SupportWheelOfFate.API.Jobs
                 "Jojo",
                 "Jasmine"
             };
-        }
 
-        private IEnumerable<DayOfWeek> Workdays
-        {
-            get => new List<DayOfWeek>
+        private IEnumerable<DayOfWeek> Workdays =>
+            new List<DayOfWeek>
             {
                 DayOfWeek.Monday,
                 DayOfWeek.Tuesday,
@@ -96,6 +88,14 @@ namespace SupportWheelOfFate.API.Jobs
                 DayOfWeek.Thursday,
                 DayOfWeek.Friday
             };
+
+        private bool SchedulesForCurrentMonthAlreadyExist()
+        {
+            var firstDayInMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            var schedulesForFirstDayInMonth = _scheduleRepository.GetSchedulesBetween(
+                firstDayInMonth, firstDayInMonth.AddDays(1));
+
+            return schedulesForFirstDayInMonth.Any();
         }
     }
 }
