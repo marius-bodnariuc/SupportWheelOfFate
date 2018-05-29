@@ -14,20 +14,31 @@ namespace SupportWheelOfFate.Core
             _people = people;
         }
 
-        public IEnumerable<Schedule> Generate()
+        // TODO use an enum instead of the bool param
+        public IEnumerable<Schedule> Generate(bool forNextMonth=false)
         {
-            var schedules = WorkdaysInMonth.Zip(EmployeePairs, BuildSchedulesForEmployeePair)
+            var month = forNextMonth ? DateTime.Today.Month + 1 : DateTime.Today.Month;
+
+            var employeePairCount = GetDaysInMonth(month) / Workdays.Count() + 1;
+            var employeePairs = GenerateEmployeePairs(employeePairCount);
+
+            var schedules = GetWorkdaysInMonth(month).Zip(employeePairs, BuildSchedulesForEmployeePair)
                 .SelectMany(schedule => schedule);
 
             return schedules;
         }
 
-        private IEnumerable<DateTime> WorkdaysInMonth =>
-            Enumerable.Range(1, DaysInMonth)
-                .Select(day => new DateTime(DateTime.Today.Year, DateTime.Today.Month, day))
+        private IEnumerable<DateTime> GetWorkdaysInMonth(int month)
+        {
+            return Enumerable.Range(1, GetDaysInMonth(month))
+                .Select(day => new DateTime(DateTime.Today.Year, month, day))
                 .Where(date => Workdays.Contains(date.DayOfWeek));
+        }
 
-        private int DaysInMonth => DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month);
+        private int GetDaysInMonth(int month)
+        {
+            return DateTime.DaysInMonth(DateTime.Today.Year, month);
+        }
 
         private IEnumerable<DayOfWeek> Workdays =>
             new List<DayOfWeek>
@@ -39,22 +50,19 @@ namespace SupportWheelOfFate.Core
                 DayOfWeek.Friday
             };
 
-        private IEnumerable<(string, string)> EmployeePairs
+        private IEnumerable<(string, string)> GenerateEmployeePairs(int count)
         {
-            get
+            var employeePairs = Enumerable.Empty<(string, string)>();
+            count.Times(() =>
             {
-                var employeePairs = Enumerable.Empty<(string, string)>();
-                (DaysInMonth / Workdays.Count() + 1).Times(() =>
-                {
-                    // making sure the first pair in a new set doesn't include
-                    // any of the employees from the last pair in the previous set
-                    var randomPairs = GetValidNextRandomPairList(employeePairs);
+                // making sure the first pair in a new set doesn't include
+                // any of the employees from the last pair in the previous set
+                var randomPairs = GetValidNextRandomPairList(employeePairs);
 
-                    employeePairs = employeePairs.Concat(randomPairs);
-                });
+                employeePairs = employeePairs.Concat(randomPairs);
+            });
 
-                return employeePairs;
-            }
+            return employeePairs;
         }
 
         private static Func<DateTime, (string, string), List<Schedule>> BuildSchedulesForEmployeePair =>
