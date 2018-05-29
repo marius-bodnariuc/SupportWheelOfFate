@@ -21,6 +21,7 @@ namespace SupportWheelOfFate.API.Repositories
         {
             var schedules = _dbContext.Schedules
                 .Where(schedule => schedule.StartTime >= startTime && schedule.EndTime <= endTime)
+                .OrderBy(schedule => schedule.StartTime)
                 .ToList();
 
             // TODO use ILogger, instead
