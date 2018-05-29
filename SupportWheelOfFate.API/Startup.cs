@@ -70,7 +70,7 @@ namespace SupportWheelOfFate.API
 
             BackgroundJob.Schedule(
                 () => new GenerateSchedulesForNextMonthIfNeededJob(scheduleRepository).Execute(),
-                TimeSpan.FromMilliseconds(6 * 1000));
+                TimeSpan.FromMilliseconds(20 * 1000));
 
             RecurringJob.AddOrUpdate("GenerateSchedulesForNextMonthIfNeeded",
                 () => new GenerateSchedulesForNextMonthIfNeededJob(scheduleRepository).Execute(),

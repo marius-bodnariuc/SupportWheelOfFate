@@ -26,6 +26,8 @@ namespace SupportWheelOfFate.API.Jobs
                     return;
                 }
 
+                // TODO make sure the schedules for the current month are in place;
+                // right now, this is at the mercy of Hanfire's scheduler ...
                 var schedules = WorkdaysInMonth.Zip(EmployeePairs, BuildSchedulesForEmployeePair)
                 .SelectMany(schedule => schedule);
 
