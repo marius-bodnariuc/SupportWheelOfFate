@@ -68,8 +68,12 @@ namespace SupportWheelOfFate.API
                 () => new EnsureSchedulesForCurrentMonthAreInPlaceJob(scheduleRepository).Execute(),
                 TimeSpan.FromMilliseconds(3 * 1000));
 
+            BackgroundJob.Schedule(
+                () => new GenerateSchedulesForNextMonthIfNeededJob(scheduleRepository).Execute(),
+                TimeSpan.FromMilliseconds(6 * 1000));
+
             RecurringJob.AddOrUpdate("GenerateSchedulesForNextMonthIfNeeded",
-                () => new GenerateSchedulesForNextMonthIfNeeded().Execute(),
+                () => new GenerateSchedulesForNextMonthIfNeededJob(scheduleRepository).Execute(),
                 Cron.Daily);
         }
     }
