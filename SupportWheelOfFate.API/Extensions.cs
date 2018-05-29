@@ -16,5 +16,15 @@ namespace SupportWheelOfFate.API
                 EndTime = schedule.EndTime
             };
         }
+
+        public static Schedule ToPersistedModel(this Core.Schedule schedule)
+        {
+            return new Schedule
+            {
+                Employee = schedule.Employee,
+                StartTime = schedule.StartTime,
+                EndTime = schedule.EndTime
+            };
+        }
     }
 }
