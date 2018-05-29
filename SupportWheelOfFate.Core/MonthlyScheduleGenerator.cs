@@ -44,7 +44,7 @@ namespace SupportWheelOfFate.Core
 
                         var schedule = new Schedule
                         {
-                            Person = _people.ElementAt(personIndex),
+                            Employee = _people.ElementAt(personIndex),
                             StartTime = new DateTime(workday.Year, workday.Month, workday.Day),
                             EndTime = new DateTime(workday.Year, workday.Month, workday.Day)
                         };

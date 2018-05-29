@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SupportWheelOfFate.API.Persistence;
 using SupportWheelOfFate.API.Repositories;
+using SupportWheelOfFate.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
