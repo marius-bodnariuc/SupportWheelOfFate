@@ -1,6 +1,7 @@
 ﻿using Moq;
 using Newtonsoft.Json;
 using SupportWheelOfFate.API.Controllers;
+using SupportWheelOfFate.API.Persistence;
 using SupportWheelOfFate.API.Repositories;
 using System;
 using System.Collections.Generic;

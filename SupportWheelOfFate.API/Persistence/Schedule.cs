@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SupportWheelOfFate.API
+namespace SupportWheelOfFate.API.Persistence
 {
     public class Schedule
     {
