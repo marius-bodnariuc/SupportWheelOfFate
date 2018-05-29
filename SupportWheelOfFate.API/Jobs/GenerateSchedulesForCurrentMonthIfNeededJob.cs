@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace SupportWheelOfFate.API.Jobs
 {
-    internal class EnsureSchedulesForCurrentMonthAreInPlaceJob : IJob
+    internal class GenerateSchedulesForCurrentMonthIfNeededJob : IJob
     {
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IEmployeeRepository _employeeRepository;
 
-        public EnsureSchedulesForCurrentMonthAreInPlaceJob(
+        public GenerateSchedulesForCurrentMonthIfNeededJob(
             IScheduleRepository scheduleRepository,
             IEmployeeRepository employeeRepository)
         {

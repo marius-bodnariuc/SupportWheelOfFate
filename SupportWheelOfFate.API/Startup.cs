@@ -67,7 +67,7 @@ namespace SupportWheelOfFate.API
             var employeeRepository = serviceProvider.GetService<IEmployeeRepository>();
 
             BackgroundJob.Schedule(
-                () => new EnsureSchedulesForCurrentMonthAreInPlaceJob(scheduleRepository, employeeRepository).Execute(),
+                () => new GenerateSchedulesForCurrentMonthIfNeededJob(scheduleRepository, employeeRepository).Execute(),
                 TimeSpan.FromMilliseconds(3 * 1000));
 
             BackgroundJob.Schedule(
