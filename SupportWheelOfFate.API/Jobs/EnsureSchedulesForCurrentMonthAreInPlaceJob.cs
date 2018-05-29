@@ -12,10 +12,14 @@ namespace SupportWheelOfFate.API.Jobs
     internal class EnsureSchedulesForCurrentMonthAreInPlaceJob : IJob
     {
         private readonly IScheduleRepository _scheduleRepository;
+        private readonly IEmployeeRepository _employeeRepository;
 
-        public EnsureSchedulesForCurrentMonthAreInPlaceJob(IScheduleRepository scheduleRepository)
+        public EnsureSchedulesForCurrentMonthAreInPlaceJob(
+            IScheduleRepository scheduleRepository,
+            IEmployeeRepository employeeRepository)
         {
             _scheduleRepository = scheduleRepository;
+            _employeeRepository = employeeRepository;
         }
 
         public async Task Execute()
@@ -47,18 +51,6 @@ namespace SupportWheelOfFate.API.Jobs
         }
 
         private IEnumerable<string> Employees =>
-            new List<string>
-            {
-                "John",
-                "Jane",
-                "Jack",
-                "Jim",
-                "Jacqueline",
-                "Jenny",
-                "Jeroen",
-                "Joel",
-                "Jojo",
-                "Jasmine"
-            };
+            _employeeRepository.GetAll();
     }
 }
