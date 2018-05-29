@@ -19,36 +19,15 @@ namespace SupportWheelOfFate.Core
         {
             var month = forNextMonth ? DateTime.Today.Month + 1 : DateTime.Today.Month;
 
-            var employeePairCount = GetDaysInMonth(month) / Workdays.Count() + 1;
-            var employeePairs = GenerateEmployeePairs(employeePairCount);
+            var workWeeksInMonth = CalendarHelpers.GetWorkWeeksInMonth(month);
+            var employeePairs = GenerateEmployeePairs(workWeeksInMonth);
 
-            var schedules = GetWorkdaysInMonth(month).Zip(employeePairs, BuildSchedulesForEmployeePair)
+            var schedules = CalendarHelpers.GetWorkdaysInMonth(month)
+                .Zip(employeePairs, BuildSchedulesForEmployeePair)
                 .SelectMany(schedule => schedule);
 
             return schedules;
         }
-
-        private IEnumerable<DateTime> GetWorkdaysInMonth(int month)
-        {
-            return Enumerable.Range(1, GetDaysInMonth(month))
-                .Select(day => new DateTime(DateTime.Today.Year, month, day))
-                .Where(date => Workdays.Contains(date.DayOfWeek));
-        }
-
-        private int GetDaysInMonth(int month)
-        {
-            return DateTime.DaysInMonth(DateTime.Today.Year, month);
-        }
-
-        private IEnumerable<DayOfWeek> Workdays =>
-            new List<DayOfWeek>
-            {
-                DayOfWeek.Monday,
-                DayOfWeek.Tuesday,
-                DayOfWeek.Wednesday,
-                DayOfWeek.Thursday,
-                DayOfWeek.Friday
-            };
 
         private IEnumerable<(string, string)> GenerateEmployeePairs(int count)
         {
