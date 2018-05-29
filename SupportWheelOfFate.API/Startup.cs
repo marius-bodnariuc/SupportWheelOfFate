@@ -30,6 +30,7 @@ namespace SupportWheelOfFate.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IScheduleRepository, EFScheduleRepository>();
+            services.AddScoped<IEmployeeRepository, DummyEmployeeRepository>();
 
             services.AddMvc();
             services.AddCors();
@@ -63,17 +64,18 @@ namespace SupportWheelOfFate.API
         private void ConfigureBackgroudJobs(IServiceProvider serviceProvider)
         {
             var scheduleRepository = serviceProvider.GetService<IScheduleRepository>();
+            var employeeRepository = serviceProvider.GetService<IEmployeeRepository>();
 
             BackgroundJob.Schedule(
                 () => new EnsureSchedulesForCurrentMonthAreInPlaceJob(scheduleRepository).Execute(),
                 TimeSpan.FromMilliseconds(3 * 1000));
 
             BackgroundJob.Schedule(
-                () => new GenerateSchedulesForNextMonthIfNeededJob(scheduleRepository).Execute(),
+                () => new GenerateSchedulesForNextMonthIfNeededJob(scheduleRepository, employeeRepository).Execute(),
                 TimeSpan.FromMilliseconds(20 * 1000));
 
             RecurringJob.AddOrUpdate("GenerateSchedulesForNextMonthIfNeeded",
-                () => new GenerateSchedulesForNextMonthIfNeededJob(scheduleRepository).Execute(),
+                () => new GenerateSchedulesForNextMonthIfNeededJob(scheduleRepository, employeeRepository).Execute(),
                 Cron.Daily);
         }
     }

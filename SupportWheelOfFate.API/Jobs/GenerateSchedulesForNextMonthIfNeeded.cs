@@ -10,10 +10,14 @@ namespace SupportWheelOfFate.API.Jobs
     internal class GenerateSchedulesForNextMonthIfNeededJob : IJob
     {
         private readonly IScheduleRepository _scheduleRepository;
+        private readonly IEmployeeRepository _employeeRepository;
 
-        public GenerateSchedulesForNextMonthIfNeededJob(IScheduleRepository scheduleRepository)
+        public GenerateSchedulesForNextMonthIfNeededJob(
+            IScheduleRepository scheduleRepository,
+            IEmployeeRepository employeeRepository)
         {
             _scheduleRepository = scheduleRepository;
+            _employeeRepository = employeeRepository;
         }
 
         public async Task Execute()
@@ -56,18 +60,6 @@ namespace SupportWheelOfFate.API.Jobs
         }
 
         private IEnumerable<string> Employees =>
-            new List<string>
-            {
-                "John",
-                "Jane",
-                "Jack",
-                "Jim",
-                "Jacqueline",
-                "Jenny",
-                "Jeroen",
-                "Joel",
-                "Jojo",
-                "Jasmine"
-            };
+            _employeeRepository.GetAll();
     }
 }
