@@ -65,3 +65,34 @@ SupportWheelOfFate.API> Schedules for next month already in place
 
 ![Screenshot](calendar-ui-screenshot.png)
 
+## Solution structure
+
+There are three projects making up the current solution:
+
+* SupportWheelOfFate.Web
+* SupportWheelOfFate.API
+* SupportWheelOfFate.Core
+
+#### SupportWheelOfFate.Web
+
+This is the web frontend and it only consists of an HTML document leveraging the popular `FullCalendar` JS library.
+
+The actual data that gets fed into the calendar is, of course, fetched from the API, which is described below.
+
+#### SupportWheelOfFate.API
+
+Simple `WebApi` project exposing an endpoint that returns the schedules for a +/-45 day interval centered on the current date:
+
+```GET /api/schedules```
+
+The data is returned as an array of JSON objects resembling the following:
+
+```
+{"startTime":"2018-05-01T09:00:00","endTime":"2018-05-01T13:00:00","employee":"Jim"}
+```
+
+This is also where other concerns such as persistence (`SQLite`) and background jobs (`Hangfire`) are addressed.
+
+#### SupportWheelOfFate.Core
+
+This is where the schedule generation logic resides.
