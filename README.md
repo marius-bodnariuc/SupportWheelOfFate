@@ -63,5 +63,5 @@ SupportWheelOfFate.API> Schedules for next month already in place
 
 *** Doing so should cause a simple calendar to be loaded in the browser, displaying the schedules for the current month, e.g.:
 
-_TODO link screenshot here_
+![Screenshot](calendar-ui-screenshot.png)
 
