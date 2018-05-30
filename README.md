@@ -1,6 +1,70 @@
 # SupportWheelOfFate
 Random work schedule generator for 10 employees and 2 daily shifts, weekends excluded
 
+## Approach
+
+The chosen high-level strategy is to generate monthly schedules in advance, since that's normally helpful when it comes to planning and such things.
+
+Background jobs have been configured to take care of generating schedules for the current month - if they're not already in place, as well as for the coming month - if the current date is the 23rd or later.
+
+The generated schedules should, of course, be manually editable, as long as they obey the business rules, although this is not currently implemented.
+
+There are two approaches that have been considered, each of which is given a brief overview below.
+
+*NOTE that the 2nd approach isn't used - nor is it fully implemented - at this time*
+
+#### First Approach
+
+Given that we have 10 employees and 2 daily (half-)shifts, we can cover weekly schedules by having each employee work only one shift per week.
+
+This is probably desirable, since it minimizes the stress on the individual and maximizes diversity.
+
+A simple approach is to generate random permutations of employees and then zip them with the daily shifts. Example for one workday and two employees:
+
+`[John, Jane]`
+x
+`[Wed Morning, Wed Afternoon]`
+=>
+`[{John, Wed Morning}, {Jane, Wed Afternoon}]`
+
+Of course, validations of the business rules need to occur when adding new weekly schedules, considering the previous one/s.
+
+*NOTE that the above validations aren't implemented in the current version*
+
+* `Pros`: simplicity, ease of implementation
+* `Cons`: not very flexible with business rules change
+
+#### Second Approach
+
+Another, more complex approach, is to generate valid work patterns for the desired period and then assign them to people, making sure the whole timetable is covered.
+
+Example for a 2-day period, 2 shifts, 4 employees:
+
+`patterns:`
+
+`[{0, 1}, {1, 0}]`
+x
+`[Mon, Tue]`
+x
+`[Morning, Afternoon]`
+=>
+`[[0, {Tue, Morning}], [0, {Tue, Afternoon}], [{Mon, Morning}, 0], [{Mon, Afternoon}, 0]]`
+
+`schedules:`
+
+`patterns`
+x
+`[John, Jane, Jim, Jack]`
+=>
+`[{John, Tue, Morning}, {Jane, Tue, Afternoon}, {Jim, Mon, Morning}, {Jack, Mon, Afternoon}]`
+
+This example maximizes diversity while minimizing stress on the individual, to keep in line with the one in the first approach. It is, however, easy to see how flexibility can be achieved by just varying the day on/off patterns.
+
+Another remark here is that shorther patterns (e.g. 5-day) can be generated and then concatenated into longer ones (e.g. 10-day): `{0, 0, 0, 1, 0}` `o` `{1, 0, 0, 0, 0}` => `{0, 0, 0, 1, 0, 1, 0, 0, 0, 0}`.
+
+* `Pros`: flexibility
+* `Cons`: more difficult to implement
+
 ## Setup
 * Clone the repository
 * `cd` into `SupportWheelOfFate.API` and restore the database:
