@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Hangfire;
@@ -33,11 +34,28 @@ namespace SupportWheelOfFate.API
             services.AddScoped<IEmployeeRepository, DummyEmployeeRepository>();
 
             services.AddMvc();
-            services.AddCors();
+            services.AddCors(options =>
+                options.AddPolicy("AllowAll", builder =>
+                    builder.AllowAnyOrigin()
+                           .AllowAnyHeader()
+                           .AllowAnyMethod()));
 
-            services.AddEntityFrameworkSqlite()
+            // ignore SQLite for now
+            //services.AddEntityFrameworkSqlite()
+            //    .AddDbContext<SupportWheelOfFateContext>(options =>
+            //        options.UseSqlite(Configuration.GetConnectionString("SQLiteDB")));
+
+            var connectionStringBuilder = new SqlConnectionStringBuilder(
+                Configuration.GetConnectionString("AzureSqlDB"))
+            {
+                Password = Configuration["DbPassword"]
+            };
+
+            var connectionString = connectionStringBuilder.ConnectionString;
+
+            services.AddEntityFrameworkSqlServer()
                 .AddDbContext<SupportWheelOfFateContext>(options =>
-                    options.UseSqlite(Configuration.GetConnectionString("SQLiteDB")));
+                    options.UseSqlServer(connectionString));
 
             services.AddHangfire(config => config.UseMemoryStorage());
         }
@@ -50,9 +68,8 @@ namespace SupportWheelOfFate.API
                 app.UseDeveloperExceptionPage();
             }
 
-            // TODO: this should be fetched from a settings file
-            app.UseCors(builder =>
-                builder.WithOrigins("http://localhost:59664"));
+            // allow anything, for now
+            app.UseCors("AllowAll");
 
             app.UseMvc();
 
